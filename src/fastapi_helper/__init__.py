@@ -1,4 +1,4 @@
-from src.fastapi_helper.exceptions.http_exceptions import BaseHTTPException, DefaultHTTPException
+from .exceptions.http_exceptions import BaseHTTPException, DefaultHTTPException
 
 
 __all__ = [

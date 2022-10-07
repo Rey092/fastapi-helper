@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.poetry]
 name = "fastapi-helper"
-version = "0.0.1"
 description = ""
 authors = ["Rey <roman.cheban@ukr.net>", "Bogdan <bogdan24ro@gmail.com>", "Artem <kalaficzkij@ukr.net>"]
 license = "MIT"
