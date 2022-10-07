@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 from abc import abstractproperty
+
 from fastapi import HTTPException  # noqa
 
 
@@ -7,19 +9,19 @@ class ClassABC(type):
         abstracts = set()
 
         for base in bases:
-            abstracts.update(getattr(base, '__abstractclassmethods__', set()))
+            abstracts.update(getattr(base, "__abstractclassmethods__", set()))
 
         for abstract in abstracts:
             annotation_type = bases[0].__annotations__.get(abstract)
 
             if not isinstance(getattr(cls, abstract), annotation_type):
-                raise TypeError("Wrong type of {0}".format(abstract))
+                raise TypeError("Wrong type of {}".format(abstract))
 
-            if getattr(getattr(cls, abstract), '__isabstractmethod__', False):
-                raise TypeError("Your class doesn't define {0}".format(abstract))
+            if getattr(getattr(cls, abstract), "__isabstractmethod__", False):
+                raise TypeError("Your class doesn't define {}".format(abstract))
 
         for attr in attrs:
-            if getattr(attrs[attr], '__isabstractmethod__', False):
+            if getattr(attrs[attr], "__isabstractmethod__", False):
                 abstracts.add(attr)
 
         cls.__abstractclassmethods__ = abstracts
