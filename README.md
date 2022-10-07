@@ -1,6 +1,6 @@
-# FastAPI Fancy Exceptions
+# FastAPI Helper
 
-#### Sample code
+## Simple and customizable HTTP exceptions
 ```python
 import uvicorn
 from fastapi import FastAPI
