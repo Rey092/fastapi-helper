@@ -32,9 +32,7 @@ class ClassABC(type):
 class BaseHTTPException(HTTPException, metaclass=ClassABC):
     status_code: int = 400
 
-    def __init__(
-        self,
-    ) -> None:
+    def __init__(self) -> None:
         super().__init__(status_code=self.status_code)
 
 

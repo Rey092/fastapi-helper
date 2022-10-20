@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-#
+from humps.main import camelize
+from pydantic import BaseModel
+
+
 # class JwtHTTPBearer(HTTPBearer):
 #     async def __call__(
 #         self,
@@ -63,9 +66,10 @@
 #     return cls
 #
 #
-# class ApiSchema(PydanticModel):
-#     class Config:
-#         orm_mode = True
-#         orig_model = None
-#         alias_generator = camelize
-#         allow_population_by_field_name = True
+
+
+class ApiSchema(BaseModel):
+    class Config:
+        orm_mode = True
+        alias_generator = camelize
+        allow_population_by_field_name = True
