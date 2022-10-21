@@ -40,3 +40,22 @@ class DefaultHTTPException(BaseHTTPException):
     code: str = abstractproperty()
     type: str = abstractproperty()
     message: str = abstractproperty()
+
+    def __init__(self, message: str = None):
+        self.message = message if message else self.message
+        super(DefaultHTTPException, self).__init__()
+
+    def example(self):
+        example = {
+            "summary": self.type,
+            "value": {
+                "detail": [
+                    {
+                        "code": self.code,
+                        "type": self.type,
+                        "message": self.message,
+                    },
+                ],
+            },
+        }
+        return example
