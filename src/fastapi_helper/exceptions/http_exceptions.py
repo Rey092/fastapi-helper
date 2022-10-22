@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from abc import abstractproperty
-
 from fastapi import HTTPException  # noqa
 
 

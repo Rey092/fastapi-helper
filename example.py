@@ -30,4 +30,4 @@ async def root():
     raise AuthException()
 
 
-uvicorn.run(app, host="localhost", port=8000)
+uvicorn.run(app, host="localhost", port=8001)
