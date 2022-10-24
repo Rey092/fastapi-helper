@@ -5,6 +5,7 @@ from starlette import status
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
+from fastapi_helper.schemas.examples import examples_generate
 from src.fastapi_helper.exceptions import DefaultHTTPException
 
 app = FastAPI()
@@ -25,7 +26,13 @@ async def http_exception_accept_handler(request: Request, exc: DefaultHTTPExcept
     )
 
 
-@app.get("/")
+@app.get(
+    "/",
+    responses=examples_generate.get_error_responses(
+       AuthException,
+       auth=True
+    )
+)
 async def root():
     raise AuthException()
 

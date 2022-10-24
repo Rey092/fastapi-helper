@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from abc import abstractproperty
 from fastapi import HTTPException  # noqa
+from starlette import status
 
 
 class ClassABC(type):
@@ -47,14 +48,14 @@ class DefaultHTTPException(BaseHTTPException):
     def example(self):
         example = {
             "summary": self.type,
-            "value": {
-                "detail": [
-                    {
-                        "code": self.code,
-                        "type": self.type,
-                        "message": self.message,
-                    },
-                ],
-            },
+            "value":
+            [
+                {
+                    "code": self.code,
+                    "type": self.type,
+                    "message": self.message
+                 },
+            ]
         }
         return example
+
