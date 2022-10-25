@@ -31,6 +31,3 @@ class PasswordHelper:
     @staticmethod
     def generate() -> str:
         return pwd.genword()
-
-
-password_helper = PasswordHelper()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from abc import abstractproperty
+import abc
+from abc import abstractproperty, abstractmethod
 from fastapi import HTTPException  # noqa
 from starlette import status
 
@@ -13,12 +14,12 @@ class ClassABC(type):
 
         for abstract in abstracts:
             annotation_type = bases[0].__annotations__.get(abstract)
+            if annotation_type:
+                if not isinstance(getattr(cls, abstract), annotation_type):
+                    raise TypeError("Wrong type of {}".format(abstract))
 
-            if not isinstance(getattr(cls, abstract), annotation_type):
-                raise TypeError("Wrong type of {}".format(abstract))
-
-            if getattr(getattr(cls, abstract), "__isabstractmethod__", False):
-                raise TypeError("Your class doesn't define {}".format(abstract))
+                if getattr(getattr(cls, abstract), "__isabstractmethod__", False):
+                    raise TypeError("Your class doesn't define {}".format(abstract))
 
         for attr in attrs:
             if getattr(attrs[attr], "__isabstractmethod__", False):
@@ -35,6 +36,10 @@ class BaseHTTPException(HTTPException, metaclass=ClassABC):
     def __init__(self) -> None:
         super().__init__(status_code=self.status_code)
 
+    @abc.abstractmethod
+    def example(self) -> dict:
+        pass
+
 
 class DefaultHTTPException(BaseHTTPException):
     code: str = abstractproperty()
@@ -45,7 +50,7 @@ class DefaultHTTPException(BaseHTTPException):
         self.message = message if message else self.message
         super(DefaultHTTPException, self).__init__()
 
-    def example(self):
+    def example(self) -> dict:
         example = {
             "summary": self.type,
             "value":
