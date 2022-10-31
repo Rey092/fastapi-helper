@@ -12,7 +12,6 @@ from fastapi_helper.exceptions.http_exceptions import DefaultHTTPException
 
 
 class ExamplesGenerate:
-    responses = {}
     auth_error = (
         UnauthorizedException,
         InvalidCredentialsException,
@@ -26,6 +25,7 @@ class ExamplesGenerate:
         responses[error_code]["content"]["application/json"] = {}
 
     def get_error_responses(self, *args: Optional[DefaultHTTPException], auth: bool = False) -> dict:
+        responses = {}
         if auth:
             args += self.auth_error
 
@@ -39,12 +39,12 @@ class ExamplesGenerate:
                 if instance.status_code == error_code:
                     examples[instance.type] = instance.example()
 
-            self.generate_nested_schema_for_code(self.responses, error_code)
-            self.responses[error_code]["content"]["application/json"]["examples"] = examples
+            self.generate_nested_schema_for_code(responses, error_code)
+            responses[error_code]["content"]["application/json"]["examples"] = examples
 
-        self.change_422_validation_schema(self.responses)
+        self.change_422_validation_schema(responses)
 
-        return self.responses
+        return responses
 
     def change_422_validation_schema(self, responses):
         self.generate_nested_schema_for_code(responses, status.HTTP_422_UNPROCESSABLE_ENTITY)
