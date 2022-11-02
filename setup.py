@@ -23,7 +23,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="fastapi-helper",  # Required
-    version="0.0.11",  # Required
+    version="0.0.12",  # Required
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary

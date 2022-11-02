@@ -2,48 +2,10 @@
 import inspect
 from typing import Type
 
-from fastapi import Form
+from fastapi import Form, UploadFile, File
 from humps.main import camelize
 from pydantic import BaseModel
 from pydantic.fields import ModelField
-
-
-# class JwtHTTPBearer(HTTPBearer):
-#     async def __call__(
-#         self,
-#         request: Request,
-#     ) -> Optional[HTTPAuthorizationCredentials]:
-#         authorization: str = request.headers.get("Authorization")
-#         scheme, credentials = get_authorization_scheme_param(authorization)
-#         if not (authorization and scheme and credentials):
-#             if self.auto_error:
-#                 raise HTTPException(
-#                     status_code=HTTP_403_FORBIDDEN,
-#                     detail={
-#                         "code": "bearer-001",
-#                         "type": "NOT_AUTHENTICATED",
-#                         "message": "Not authenticated",
-#                     },
-#                 )
-#             else:
-#                 return None
-#         if scheme.lower() != "bearer":
-#             if self.auto_error:
-#                 raise HTTPException(
-#                     status_code=HTTP_403_FORBIDDEN,
-#                     detail={
-#                         "code": "bearer-001",
-#                         "type": "NOT_AUTHENTICATED",
-#                         "message": "Invalid authentication format",
-#                     },
-#                 )
-#             else:
-#                 return None
-#         return HTTPAuthorizationCredentials(scheme=scheme, credentials=credentials)
-#
-#
-# jwt_http_bearer = JwtHTTPBearer()
-# jwt_http_bearer_no_error = JwtHTTPBearer(auto_error=False)
 
 
 def as_form(cls: Type[BaseModel]):
@@ -51,9 +13,15 @@ def as_form(cls: Type[BaseModel]):
 
     for field_name, model_field in cls.__fields__.items():
         model_field: ModelField
-
         new_parameters.append(
             inspect.Parameter(
+                model_field.alias,
+                inspect.Parameter.POSITIONAL_ONLY,
+                default=File(...) if model_field.required else File(model_field.default),
+                annotation=model_field.outer_type_,
+            )
+            if model_field.type_ == UploadFile
+            else inspect.Parameter(
                 model_field.alias,
                 inspect.Parameter.POSITIONAL_ONLY,
                 default=Form(...) if model_field.required else Form(model_field.default),
